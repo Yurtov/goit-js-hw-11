@@ -6,6 +6,7 @@
   height: 100%;
   background-color: wheat;
   opacity: 70%;
+  z-index: 1000;
 }
 
 .loader {
