@@ -72,6 +72,11 @@ async function heandleBtnLoadMore() {
     showLoader(refs);
     const { hits, total } = await pixabayApiService.fetchArticles();
 
+    refs.murkupGalleryContainer.insertAdjacentHTML(
+      'beforeend',
+      murkupGallery(hits)
+    );
+
     if (
       refs.murkupGalleryContainer.getElementsByTagName('li').length === total
     ) {
@@ -80,15 +85,6 @@ async function heandleBtnLoadMore() {
         "We're sorry, but you've reached the end of search results."
       );
     }
-
-    refs.murkupGalleryContainer.insertAdjacentHTML(
-      'beforeend',
-      murkupGallery(hits)
-    );
-
-    console.log(refs.murkupGalleryContainer.getElementsByTagName('li').length);
-    console.log(total);
-
     pixabayApiService.incrementPage();
   } catch (err) {
     Notiflix.Notify.failure(`Oops, ${err}. Please try again.`);

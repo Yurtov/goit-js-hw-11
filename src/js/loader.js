@@ -5,5 +5,5 @@ export function showLoader(refs) {
 export function hideLoader(refs) {
   window.setTimeout(function () {
     refs.preloader.style.display = 'none';
-  }, 1000);
+  }, 1500);
 }
