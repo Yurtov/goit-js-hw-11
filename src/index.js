@@ -40,6 +40,8 @@ async function heandleBtnSearchSubmit(e) {
 
     const gallery = new SimpleLightbox('.gallery a', {
       captionDelay: 250,
+      captionsData: 'alt',
+      captionPosition: 'bottom',
     });
     refs.loadMoreBtnEl.classList.remove('is-hidden');
 
