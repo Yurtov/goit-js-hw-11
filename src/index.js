@@ -54,9 +54,6 @@ async function heandleBtnSearchSubmit(e) {
       );
     }
 
-    console.log(refs.murkupGalleryContainer.getElementsByTagName('li').length);
-    console.log(total);
-
     pixabayApiService.incrementPage();
   } catch {
     refs.murkupGalleryContainer.innerHTML = '';
