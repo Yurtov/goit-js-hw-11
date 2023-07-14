@@ -1,7 +1,8 @@
 @import url('./loader.css');
 @import url('./scrollToTop.css');
 
-p {
+* {
+  padding: 0;
   margin: 0;
 }
 
@@ -297,5 +298,3 @@ input[type='text']::placeholder {
   box-shadow: 10px 15px 20px rgba(46, 47, 66, 0.08),
     0px 10px 10px rgba(46, 47, 66, 0.16), 10px 10px 10px rgba(46, 47, 66, 0.08);
 }
-
-

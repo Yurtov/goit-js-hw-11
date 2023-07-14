@@ -1,9 +1,9 @@
 export function showLoader(refs) {
-  refs.loadingMessage.style.display = 'block';
+  refs.preloader.style.display = 'block';
 }
 
 export function hideLoader(refs) {
   window.setTimeout(function () {
-    refs.loadingMessage.style.display = 'none';
+    refs.preloader.style.display = 'none';
   }, 1000);
 }
