@@ -267,7 +267,7 @@ input[type='text']::placeholder {
 }
 
 .gallery-text {
-  color: #000;
+  color: #ffffffeb;
 }
 
 .gallery-link:is(:hover, :focus) {

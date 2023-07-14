@@ -3,11 +3,12 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import { refs } from './js/refs';
+import { murkupGallery } from './js/murkup';
 import { showLoader, hideLoader } from './js/loader';
-import {scrollShowBtnToTop, scrollToTop} from './js/scroll-to-top';
+import { scrollShowBtnToTop, scrollToTop } from './js/scroll-to-top';
 
 const pixabayApiService = new PixabayApiService();
-scrollShowBtnToTop()
+scrollShowBtnToTop();
 
 refs.searchFormEl.addEventListener('submit', heandleBtnSearchSubmit);
 refs.loadMoreBtnEl.addEventListener('click', heandleBtnLoadMore);
@@ -16,8 +17,8 @@ refs.scrollToTopBtnEl.addEventListener('click', scrollToTop);
 async function heandleBtnSearchSubmit(e) {
   e.preventDefault();
   scrollToTop();
+  pixabayApiService.query = e.target.elements.searchQuery.value.trim();
 
-  pixabayApiService.query = e.target.elements.searchQuery.value;
   if (pixabayApiService.query === '') {
     return Notiflix.Notify.failure(
       'You cannot send an empty request, please write something'
@@ -26,29 +27,21 @@ async function heandleBtnSearchSubmit(e) {
 
   pixabayApiService.resetPage();
 
-  // pixabayApiService
-  //   .fetchArticles()
-  //   .then(hits => {
-  //     showSpiner();
-  //     refs.murkupGalleryContainer.innerHTML = murkupGallery(hits);
-  //   })
-  //   .catch(console.error('error'))
-  //   .finally(hideSpiner(), refs.loadMoreBtnEl.classList.remove('.is-hidden'));
-
   try {
     showLoader(refs);
     const { hits, total } = await pixabayApiService.fetchArticles();
 
-    if (total === 0) {
+    if (total === 0 || !hits) {
       throw new Error();
     }
+
     Notiflix.Notify.success(`Found ${total} cards matching your request`);
     refs.murkupGalleryContainer.innerHTML = murkupGallery(hits);
+
     const gallery = new SimpleLightbox('.gallery a', {
       captionDelay: 250,
     });
     refs.loadMoreBtnEl.classList.remove('is-hidden');
-    
 
     if (
       refs.murkupGalleryContainer.getElementsByTagName('li').length === total
@@ -58,6 +51,9 @@ async function heandleBtnSearchSubmit(e) {
         "We're sorry, but you've reached the end of search results."
       );
     }
+
+    console.log(refs.murkupGalleryContainer.getElementsByTagName('li').length);
+    console.log(total);
 
     pixabayApiService.incrementPage();
   } catch {
@@ -72,17 +68,6 @@ async function heandleBtnSearchSubmit(e) {
 }
 
 async function heandleBtnLoadMore() {
-  pixabayApiService.incrementPage();
-
-  // pixabayApiService
-  //   .fetchArticles()
-  //   .then(hits =>
-  //     refs.murkupGalleryContainer.insertAdjacentHTML(
-  //       'beforeend',
-  //       murkupGallery(hits)
-  //     )
-  //   );
-
   try {
     showLoader(refs);
     const { hits, total } = await pixabayApiService.fetchArticles();
@@ -91,57 +76,23 @@ async function heandleBtnLoadMore() {
       refs.murkupGalleryContainer.getElementsByTagName('li').length === total
     ) {
       refs.loadMoreBtnEl.classList.add('is-hidden');
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
 
     refs.murkupGalleryContainer.insertAdjacentHTML(
       'beforeend',
       murkupGallery(hits)
     );
+
+    console.log(refs.murkupGalleryContainer.getElementsByTagName('li').length);
+    console.log(total);
+
+    pixabayApiService.incrementPage();
   } catch (err) {
-    console.log(err.message);
+    Notiflix.Notify.failure(`Oops, ${err}. Please try again.`);
   } finally {
     hideLoader(refs);
   }
 }
-
-function murkupGallery(data) {
-  return data
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => {
-        return `
-        <li class="gallery-item">
-          <a href='${largeImageURL}' class="gallery-link">
-            <div >
-              <img src="${webformatURL}" alt="${tags}" loading="lazy" class="gallery-img" width="300px"/>
-              <div class="gallery-content">
-                <p class="gallery-text">
-                  <b>Likes:</b> ${likes}
-                </p>
-                <p class="gallery-text">
-                  <b>Views:</b> ${views}
-                </p>
-                <p class="gallery-text">
-                  <b>Comments:</b> ${comments}
-                </p>
-                <p class="gallery-text">
-                  <b>Downloads:</b> ${downloads}
-                </p>
-              </div>
-            </div>
-          </a>
-        </li>
-        `;
-      }
-    )
-    .join('');
-}
-
-
