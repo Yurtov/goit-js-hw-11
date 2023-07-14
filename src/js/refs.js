@@ -3,5 +3,5 @@ export const refs = {
     murkupGalleryContainer: document.querySelector('.gallery'),
     loadMoreBtnEl: document.querySelector('.load-more'),
     loadingMessage: document.querySelector('.loader'),
-    // scrollToTopBtnEl: document.querySelector('.btn-up')
+    scrollToTopBtnEl: document.querySelector('.btn-up')
 }

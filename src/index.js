@@ -4,11 +4,10 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import { refs } from './js/refs';
 import { showLoader, hideLoader } from './js/loader';
-import BtnUp from './js/scrollToTop';
+import {scrollShowBtnToTop, scrollToTop} from './js/scroll-to-top';
 
 const pixabayApiService = new PixabayApiService();
-const btnUp = new BtnUp();
-btnUp.addEventListener();
+scrollShowBtnToTop()
 
 refs.searchFormEl.addEventListener('submit', heandleBtnSearchSubmit);
 refs.loadMoreBtnEl.addEventListener('click', heandleBtnLoadMore);
@@ -49,6 +48,7 @@ async function heandleBtnSearchSubmit(e) {
       captionDelay: 250,
     });
     refs.loadMoreBtnEl.classList.remove('is-hidden');
+    
 
     if (
       refs.murkupGalleryContainer.getElementsByTagName('li').length === total
@@ -144,9 +144,4 @@ function murkupGallery(data) {
     .join('');
 }
 
-function scrollToTop() {
-  window.scrollTo({
-    top: -150,
-    behavior: 'smooth',
-  });
-}
+
